@@ -16,7 +16,7 @@ const path = '/tmp/upload';
 
 app.listen(port, () => console.log(`upload-api listening at http://localhost:${port}`));
 
-var obsClient = new ObsClient(JSON.parse(fs.readFileSync('/mnt/config/huaweicloud/obs.json')));
+var obsClient = new ObsClient(JSON.parse(fs.readFileSync('/mnt/config/token/huaweicloud/obs.json')));
 
 
 app.post('/', multer({
