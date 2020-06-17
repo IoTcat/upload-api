@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<h1>文件上传</h1>
+<form action="http://127.0.0.1:3000/imgbed" method="post" enctype="multipart/form-data">
+    <input id="files" type="file" name="file" multiple/> <!-- 这里的multiple属性是允许多文件上传的,一点要写-->
+    <input type="submit" value="上传"/>
+</form>
+<input type="file" id="input-file"/>
+<script src="./esdk-obs-browserjs-without-polyfill-3.19.5.min.js"></script>
+<script type="text/javascript">
+	// 创建ObsClient实例
+var obsClient = new ObsClient({
+    access_key_id: '*** Provide your Access Key ***',       
+    secret_access_key: '*** Provide your Secret Key ***',       
+    server : 'https://your-endpoint'
+});
+
+obsClient.putObject({
+       Bucket : 'bucketname',
+       Key : 'objectname',
+       SourceFile : document.getElementById('input-file').files[0]
+}, function (err, result) {
+       if(err){
+              console.error('Error-->' + err);
+       }else{
+              console.log('Status-->' + result.CommonMsg.Status);
+       }
+});
+</script>
+</body>
+</html>
