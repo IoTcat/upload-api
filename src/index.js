@@ -45,7 +45,7 @@ app.post('/', multer({
         for (var i in files) {
             let file = files[i];
 
-            let prefix = sd.format(new Date(), 'YYYY-MM-DD') + '/'+(req.query.hasOwnProperty('fp')?req.query.fp:'default')+'/' + file.originalname;
+            let prefix = sd.format(new Date(), 'YYYY-MM-DD') + '/'+(req.query.hasOwnProperty('fp')?req.query.fp:'default')+'/' + file.originalname.replace(/\s/g, '_');
 
             obsClient.putObject({
                Bucket : 'storage.yimian.xyz',
@@ -110,8 +110,8 @@ app.post('/imgbed', multer({
                 o.data = [];
                 break;
             }
-            fs.renameSync(path+'/'+file.filename, path+'/'+ file.originalname);
-            size = sizeOf(path+'/'+ file.originalname);
+            //fs.renameSync(path+'/'+file.filename, path+'/'+ file.originalname);
+            size = sizeOf(path+'/'+ file.filename);
 
             let prefix = 'imgbed/' + 'img_' + md5(sd.format(new Date(), 'YYYY-MM-DD-HH-mm-ss')+file.filename).substring(0, 7)
                 + '_' + size.width +'x'+ size.height+'_'+'8'+'_null_normal.jpeg';
@@ -119,7 +119,7 @@ app.post('/imgbed', multer({
             obsClient.putObject({
                Bucket : 'yimian-image',
                Key : prefix,
-               SourceFile : path+'/'+file.originalname  // localfile为待上传的本地文件路径，需要指定到具体的文件名
+               SourceFile : path+'/'+file.filename  // localfile为待上传的本地文件路径，需要指定到具体的文件名
             }, (err, result) => {
                if(err){
                       o.code = 500;
@@ -127,7 +127,7 @@ app.post('/imgbed', multer({
                }else{
                       o.message = 'Status-->' + result.CommonMsg.Status;
                }
-               fs.unlink(path+'/'+file.originalname, (err)=>{
+               fs.unlink(path+'/'+file.filename, (err)=>{
                     if(err){
                         o.code = 201;
                         o.message = 'Fail to remove TMP file..';
