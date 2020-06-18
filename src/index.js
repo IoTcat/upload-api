@@ -32,6 +32,9 @@ app.post('/', multer({
     //设置文件存储路径
     dest: path
 }).array('file', 100), function (req, res, next) {  //这里10表示最大支持的文件上传数目
+    res.set({
+        'content-type': 'application/json; charset=utf-8'
+    });
     let files = req.files;
     if (files.length === 0) {
         res.render("error", {code: 400, message: "Empty Upload!!", data: []});
@@ -64,9 +67,12 @@ app.post('/', multer({
                         o.message = 'Fail to remove TMP file..';
                     }
                });
+                o.data.push('https://storage.yimian.xyz/'+prefix);
+                if(o.data.length == files.length) {
+                    res.end(JSON.stringify(o));
+                }
             });
 
-            o.data.push('https://storage.yimian.xyz/'+prefix);
             //获取文件基本信息
             /*
             fileInfo.mimetype = file.mimetype;
@@ -76,10 +82,6 @@ app.post('/', multer({
             */
         }
         // 设置响应类型及编码
-        res.set({
-            'content-type': 'application/json; charset=utf-8'
-        });
-        res.end(JSON.stringify(o));
     }
 });
 
@@ -92,6 +94,9 @@ app.post('/imgbed', multer({
     //设置文件存储路径
     dest: path
 }).array('file', 100), function (req, res, next) {  //这里10表示最大支持的文件上传数目
+    res.set({
+        'content-type': 'application/json; charset=utf-8'
+    });
     let files = req.files;
     if (files.length === 0) {
         res.render("error", {code: 400, message: "Empty Upload!!", data: []});
@@ -133,9 +138,12 @@ app.post('/imgbed', multer({
                         o.message = 'Fail to remove TMP file..';
                     }
                });
+                o.data.push('https://api.yimian.xyz/img/?path='+prefix);
+                if(o.data.length == files.length){
+                    res.end(JSON.stringify(o));
+                }
             });
 
-            o.data.push('https://api.yimian.xyz/img/?path='+prefix);
 
 
             //获取文件基本信息
@@ -147,9 +155,5 @@ app.post('/imgbed', multer({
             */
         }
         // 设置响应类型及编码
-        res.set({
-            'content-type': 'application/json; charset=utf-8'
-        });
-        res.end(JSON.stringify(o));
     }
 });
