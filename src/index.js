@@ -17,6 +17,7 @@ const path = '/tmp/upload';
 app.listen(port, () => console.log(`upload-api listening at http://localhost:${port}`));
 
 var obsClient = new ObsClient(JSON.parse(fs.readFileSync('/mnt/config/token/huaweicloud/obs.json')));
+var obsClient_Beijing = new ObsClient(JSON.parse(fs.readFileSync('/mnt/config/token/huaweicloud/obs-beijing.json')));
 
 
 app.all('*', function(req, res, next) {
@@ -50,8 +51,8 @@ app.post('/', multer({
 
             let prefix = sd.format(new Date(), 'YYYY-MM-DD') + '/'+(req.query.hasOwnProperty('fp')?req.query.fp:'default')+'/' + file.originalname.replace(/\s/g, '_');
 
-            obsClient.putObject({
-               Bucket : 'storage.yimian.xyz',
+            obsClient_Beijing.putObject({
+               Bucket : 'yimian-storage',
                Key : prefix,
                SourceFile : path+'/'+file.filename  // localfile为待上传的本地文件路径，需要指定到具体的文件名
             }, (err, result) => {
