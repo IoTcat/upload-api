@@ -141,7 +141,7 @@ app.post('/imgbed', multer({
                     }
                });
                 if(o.data.length == files.length){
-            //        res.end(JSON.stringify(o));
+                    res.end(JSON.stringify(o));
                 }
             });
 
@@ -157,6 +157,6 @@ app.post('/imgbed', multer({
             */
         }
         // 设置响应类型及编码
-        res.end(JSON.stringify(o));
+        //res.end(JSON.stringify(o));
     }
 });
