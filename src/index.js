@@ -133,6 +133,9 @@ app.post('/imgbed', multer({
                       o.message = 'Error-->' + err;
                }else{
                       o.message = 'Status-->' + result.CommonMsg.Status;
+                      if(result.CommonMsg.Status != '200'){
+                        o.code = 504;
+                      }
                }
                fs.unlink(path+'/'+file.filename, (err)=>{
                     if(err){
